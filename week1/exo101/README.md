@@ -7,7 +7,7 @@
 * Compiler le code source de la servlet,
   pour cela ajouter "servlet-api.jar" dans le classpath.
   Ce fichier est disponible dans le répertoire "lib" de Tomcat.
-* Lancer Tomcat et ouvrir l'URL suivante dans un navigateur http://localhost:8080/week101/
+* Lancer Tomcat et ouvrir l'URL suivante dans un navigateur http://localhost:8080/exo101/
 * Saisir les coordonnées de deux points
 
 En guise de contrôle, saisir les coordonnées suivantes :

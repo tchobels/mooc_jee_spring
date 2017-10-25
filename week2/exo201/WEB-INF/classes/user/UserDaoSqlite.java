@@ -12,12 +12,13 @@ public class UserDaoSqlite implements UserDao {
 		}
 	}
 	
-	private Connection conn;
+	protected Connection conn;
 	public UserDaoSqlite( String userFilePath ) throws SQLException {
 		
 		String jdbcUrl = "jdbc:sqlite:";
 		// TODO : complete JDBC URL and initialize a connection.
 		this.conn = null;
+		throw new RuntimeException("not yet implemented");
 	}
 	
 	@Override
@@ -34,6 +35,12 @@ public class UserDaoSqlite implements UserDao {
 	
 	@Override
 	public User find(long id) {
+		// TODO : get user data by its ID and map to User object 
+		throw new RuntimeException("not yet implemented");
+	}
+	
+	@Override
+	public User findByEmail(String email) {
 		// TODO : get user data by its ID and map to User object 
 		throw new RuntimeException("not yet implemented");
 	}

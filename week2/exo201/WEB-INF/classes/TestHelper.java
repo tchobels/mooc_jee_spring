@@ -26,6 +26,9 @@ public class TestHelper {
 	}
 	
 	public static int updateDb(String sql) throws SQLException {
+		
+		if ( connection == null ) createUserDao();
+		
 		return connection
 			.createStatement()
 			.executeUpdate(sql);

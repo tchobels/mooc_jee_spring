@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import fr.eservices.drive.dao.IUserDao;
 import fr.eservices.drive.model.User;
@@ -45,7 +45,7 @@ public class ChangePwdApp {
 		System.out.print(  "  choice ==> ");
 		
 		String choice = read();
-		ApplicationContext ctx = null;
+		ConfigurableApplicationContext ctx = null;
 		switch( choice ) {
 		case "1":
 			ctx = getXmlAppContext();
@@ -61,12 +61,12 @@ public class ChangePwdApp {
 		
 	}
 	
-	public static ApplicationContext getXmlAppContext() {
+	public static ConfigurableApplicationContext getXmlAppContext() {
 		// get "application-context.xml" from classpath and use it to create a spring context
 		return null;
 	}
 
-	public static ApplicationContext getAnnotationAppContext() {
+	public static ConfigurableApplicationContext getAnnotationAppContext() {
 		// use SpringConfig class to configure an annotion based context
 		return null;
 	}

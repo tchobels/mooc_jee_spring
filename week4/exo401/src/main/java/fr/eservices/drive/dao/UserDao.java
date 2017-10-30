@@ -11,11 +11,11 @@ public abstract class UserDao implements IUserDao {
 		this.pwdCheck = pwdCheck;
 	}
 	
+	protected abstract void doChangePassword(String login, String password);
+	
 	@Override
 	public void setPassword(String login, String password) {
-		User u = find(login);
-		u.setPassword( pwdCheck.encode(login, password) );
-		save(u);
+		doChangePassword( login, pwdCheck.encode(login, password) );
 	}
 	
 	@Override

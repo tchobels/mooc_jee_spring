@@ -10,17 +10,38 @@ Nous allons voir deux manières de définir un contexte Spring :
 * A l'aide d'annotations
 * A l'aide d'un fichier xml de description de beans
 
+## Implémentation des encodeurs
+
+Ce serait une mauvaise idée de vouloir stocker en clair les mots de passe dans la base de données.  
+Nous allons encoder les mots de passe avec un algorithme de "hash" qui est une fonction surjective (elle ne possède pas de fonction inverse).  
+Il ne sera donc pas possible de retrouver le mot de passe à partir du hash. La vérification du mot de passe se fera en encodant le mot de passe proposé et en comparant les hashs entre eux.  
+Afin d'éviter les attaques par dictionnaire, chaque mot de passe sera encodé avec une partie variable.  
+Ainsi, même si deux utilisateurs possèdent le même mot de passe, ils auront un hash différent. Une attaque par dictionnaire devient ainsi plus difficile.
+
+### Implémentation MD5
+
+* Implémentez MD5Checker en utilisant un objet [MessageDigest](https://docs.oracle.com/javase/8/docs/api/java/security/MessageDigest.html).
+* On calculera le hash à partir de la concaténation de "login" + "mot de passe"
+* Le hash sera encodé en base64 pour pouvoir être stocké facilement en texte, vous pouvez utilisez java.util.Base64
+
+### Implémentation HmacSHA1
+
+* Implémentez HmacChecker en utilisant un objet [Mac](https://docs.oracle.com/javase/8/docs/api/javax/crypto/Mac.html) et l'algo HmacSHA1.
+* On utilisera le login comme clé de hash à appliquer sur le mot de passe
+* Le hash sera aussi encodé en base64
+
 ## Utilisation des annotations Spring context
 
 * Déclarez les sous-classes de PasswordChecker comme deux composants distincts.
-* Implémentez au passage la méthode "encode" des deux composants, en utilisant un objet [MessageDigest](https://docs.oracle.com/javase/8/docs/api/java/security/MessageDigest.html) avec MD5 pour le premier, et un objet [Mac](https://docs.oracle.com/javase/8/docs/api/javax/crypto/Mac.html) avec l'algo HmacSHA1 pour le second. le retour se fera sous la forme d'une chaine de caractères encodé en base 64, vous pouvez utiliser java.util.Base64.
 * Déclarez le DAO utilisant JPA comme un composant, idem pour ChangePwdApp
-* Annotez les champs nécessaire en Autowired pour l'injection dans tous les composants
+* Annotez les propriétés nécessaires en Autowired pour l'injection dans tous les composants
 * On veillera à utiliser l'implémentation Hmac du PasswordChecker, tout en ayant l'autre implémentation disponible dans le contexte. Il vous faudra sans doute ajouter un Qualifier.
 * Utilisez l'objet SpringConfig pour configurer le componentScan et pour exposer l'EntityManager dans le contexte spring.
 * Complétez la méthode getAnnotationAppContext de ChangePwdApp pour construire un contexte Spring utilisant les annotations : AnnotationConfigApplicationContext.
 
-Vous devriez être en mesure de lancer le programme et de choisir l'option 2
+Le test AnnotationContextTest devrait passer.  
+Vous devriez aussi être en mesure de lancer le programme et de choisir l'option 2  
+Vous pouvez utiliser le main de la classe UserJPADao pour ajouter un utilisateur en base.
 
 A noter : le provider JPA fourni par Hibernate va générer un pool de connexion qui écoute après les événements du contexte Spring. Lorsque le contexte s'arrête, les connexions seront fermée et l'EntityManagerFactory arrêté proprement.
 
@@ -35,7 +56,8 @@ L'objectif est de fournir un fichier créant un contexte avec l'implémentation 
 * Complétez la méthode getXmlAppContext pour utiliser un contexte chargeant un fichier xml dans le classpath : ClassPathXmlApplicationContext.
 * Ajoutez une méthode dans le l'implémentation JDBC pour fermer proprement la connexion lorsque le contexte spring s'arrête. Configurez le bean correspondant pour appeler cette méthode, à l'aide de "destroy-method".
 
-Vous devriez être en mesure de lancer le programme et de choisir l'option 1
+Vous devriez être en mesure de lancer le programme et de choisir l'option 1  
+Vous pouvez utiliser le main de la classe UserJDBCDao pour ajouter un utilisateur en base.
 
 A noter : cette manière de déclarer une connexion directement sous la forme d'un bean, et de la fermer dans un DAO n'est pas une bonne pratique et ne correspond pas à un véritable cas pratique d'application. Nous voulons simplement ici illustrer les usages de la factory-method et de destroy-method.
 

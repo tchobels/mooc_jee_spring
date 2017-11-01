@@ -37,8 +37,8 @@ public class AnnotationContextTest {
 	@Test
 	public void testSpringConfig() {
 		Class<?> k = SpringConfig.class;
-		Arrays.asList( k.getAnnotations() ).contains(Configuration.class);
-		Arrays.asList( k.getAnnotations() ).contains(ComponentScan.class);
+		Assert.assertNotNull(k.getAnnotation(Configuration.class));
+		Assert.assertNotNull(k.getAnnotation(ComponentScan.class));
 		List<String> scan = Arrays.asList(k.getAnnotation(ComponentScan.class).basePackages());
 		Assert.assertTrue(scan.contains("fr.eservices.drive.dao.impl"));
 		Assert.assertTrue(scan.contains("fr.eservices.drive.util"));

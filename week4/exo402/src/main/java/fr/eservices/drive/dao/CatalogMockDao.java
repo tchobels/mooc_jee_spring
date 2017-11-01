@@ -1,6 +1,8 @@
 package fr.eservices.drive.dao;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,7 +40,7 @@ public class CatalogMockDao implements CatalogDao {
 			MappingIterator<T> readValues = 
 					mapper.readerFor(type)
 					.with(bootstrapSchema)
-					.readValues(file);
+					.readValues( new InputStreamReader(new FileInputStream(file),"UTF-8") );
 			return readValues.readAll();
 		} catch (Exception e) {
 			e.printStackTrace();

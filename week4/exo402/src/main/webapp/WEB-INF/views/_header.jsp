@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <html lang="en">
 <% String ctxPath = request.getContextPath(); %>
 <head>
@@ -39,7 +40,7 @@
           	<span class="glyphicon glyphicon-user"></span> Mon compte <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href=""><span class="glyphicon glyphicon-log-in"></span> Inscription</a></li>
-            <li><a href=""><span class="glyphicon glyphicon-off"></span> Déconnexion</a></li>
+            <li><a href=""><span class="glyphicon glyphicon-off"></span> DÃ©connexion</a></li>
           </ul>
         </li>
         <li class="dropdown">

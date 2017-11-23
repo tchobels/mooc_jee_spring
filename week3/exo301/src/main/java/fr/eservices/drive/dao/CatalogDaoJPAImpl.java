@@ -3,11 +3,17 @@ package fr.eservices.drive.dao;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import fr.eservices.drive.model.Article;
 import fr.eservices.drive.model.Category;
 import fr.eservices.drive.model.Perishable;
 
 public class CatalogDaoJPAImpl implements CatalogDao {
+	
+	public CatalogDaoJPAImpl(EntityManager em) {
+		
+	}
 
 	@Override
 	public List<Category> getCategories() {
@@ -22,7 +28,7 @@ public class CatalogDaoJPAImpl implements CatalogDao {
 	}
 
 	@Override
-	public List<Article> getCategoryContent() {
+	public List<Article> getCategoryContent(int categoryId) {
 		// TODO Auto-generated method stub
 		throw new RuntimeException("Not yet implemented");
 	}

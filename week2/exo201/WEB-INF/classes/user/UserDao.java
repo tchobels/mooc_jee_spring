@@ -27,9 +27,17 @@ public interface UserDao {
 	 * Recherche un utilisateur par son identifiant.
 	 * 
 	 * @param id
-	 * @return identifiant de l'utilisateur, négatif si non trouvé
+	 * @return utilisateur, null si non trouvé
 	 */
 	User find( long id );
+	
+	/**
+	 * Recherche un utilisateur par son email.
+	 * 
+	 * @param email
+	 * @return utilisateur, null si non trouvé
+	 */
+	public User findByEmail(String email);
 	
 	/**
 	 * Supprime un utilisateur

@@ -16,7 +16,7 @@ import org.springframework.web.servlet.view.JstlView;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 @Configuration
-@ComponentScan
+@ComponentScan(basePackages={"fr.eservices.drive.web","fr.eservices.drive.dao"})
 @EnableWebMvc
 public class AppConfig implements WebApplicationInitializer {
 	

@@ -50,8 +50,8 @@ java.util.List<String> jsList = new java.util.ArrayList<>();
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
           	<span class="glyphicon glyphicon-shopping-cart"></span> Panier <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li>
-              <%@ include file="_cart_header.jsp" %>
+            <li id="cartInHeader">
+              <!-- This part is replaced with an ajax call -->
             </li>
           </ul>
         </li>

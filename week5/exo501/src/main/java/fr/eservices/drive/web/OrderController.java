@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class OrderController {
 	
 	@RequestMapping(path="/list.html")
-	public void list(Model model) {
-		
+	public String list(Model model) {
+		return "order_list";
 	}
 
 }

@@ -14,7 +14,13 @@ $(function() {
 			url: "cart/1/add.json",
 			dataType: "json",
 			contentType: 'application/json',
-			data: JSON.stringify( {id: ref, price: null, name: null, img: null, cat_id: null} )
+			data: JSON.stringify( {id: ref, qty: 1} )
 		});
+	});
+	
+	$.ajax({
+		url: "cart/-1.html"
+	}).done(function(data){
+		JSON.stringify( $('#cartInHeader').html(data) )
 	});
 });

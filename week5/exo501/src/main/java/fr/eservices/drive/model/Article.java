@@ -4,10 +4,11 @@ public class Article {
 	
 	private String
 		id,
-		price,
 		name,
 		img,
 		cat_id;
+	
+	private int price;
 
 	public String getId() {
 		return id;
@@ -17,11 +18,11 @@ public class Article {
 		this.id = id;
 	}
 
-	public String getPrice() {
+	public int getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(int price) {
 		this.price = price;
 	}
 

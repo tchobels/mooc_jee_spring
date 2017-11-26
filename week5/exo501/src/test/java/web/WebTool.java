@@ -66,7 +66,8 @@ public class WebTool {
 		if ( "POST".equals(method) ) {
 			conn.setDoOutput( true );
 			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			String contentType = data.startsWith("{") ? "application/json" : "application/x-www-form-urlencoded";
+			conn.setRequestProperty("Content-Type", contentType);
 			OutputStream out = conn.getOutputStream();
 			out.write( data.getBytes() );
 			out.flush();

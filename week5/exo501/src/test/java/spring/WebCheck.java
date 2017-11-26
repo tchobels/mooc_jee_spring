@@ -1,6 +1,11 @@
 package spring;
 
 import static org.junit.Assert.*;
+import static fr.eservices.drive.web.dto.SimpleResponse.Status.*;
+
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,7 +18,7 @@ import fr.eservices.drive.web.dto.SimpleResponse;
 import web.HtmlUtils;
 import web.WebTool;
 
-public class JSTLCartCheck {
+public class WebCheck {
 	
 	WebTool wt;
 	ObjectMapper mapper = new ObjectMapper();
@@ -47,7 +52,7 @@ public class JSTLCartCheck {
 		Assert.assertTrue( cart.contains("Papier Cadeau") );
 		Assert.assertTrue( cart.contains("1,50") );
 		
-		Assert.assertTrue( cart.contains("Pur jus d'orange") );
+		Assert.assertTrue( cart.contains("Pur jus d&#039;orange") );
 		Assert.assertTrue( cart.contains("2,35") );
 	}
 	
@@ -64,9 +69,9 @@ public class JSTLCartCheck {
 		e.setId("10101010");
 		e.setQty(1);
 		String data = mapper.writeValueAsString( e );
-		String cart = HtmlUtils.toString( wt.post("/cart/1.json", data) );
+		String cart = HtmlUtils.toString( wt.post("/cart/1/add.json", data) );
 		SimpleResponse response = mapper.readValue(cart, SimpleResponse.class);
-		assertEquals("OK", response.status);
+		assertEquals(OK, response.status);
 	}
 	
 	@Test
@@ -75,9 +80,10 @@ public class JSTLCartCheck {
 		e.setId("20101010");
 		e.setQty(1);
 		String data = mapper.writeValueAsString( e );
-		String cart = HtmlUtils.toString( wt.post("/cart/1.json", data) );
+		
+		String cart = HtmlUtils.toString( wt.post("/cart/1/add.json", data) );
 		SimpleResponse response = mapper.readValue(cart, SimpleResponse.class);
-		assertEquals("ERROR", response.status);
+		assertEquals(ERROR, response.status);
 	}
 	
 	@Test
@@ -86,9 +92,9 @@ public class JSTLCartCheck {
 		e.setId("10101010");
 		e.setQty(-1);
 		String data = mapper.writeValueAsString( e );
-		String cart = HtmlUtils.toString( wt.post("/cart/1.json", data) );
+		String cart = HtmlUtils.toString( wt.post("/cart/1/add.json", data) );
 		SimpleResponse response = mapper.readValue(cart, SimpleResponse.class);
-		assertEquals("ERROR", response.status);
+		assertEquals(ERROR, response.status);
 	}
 	
 	@Test
@@ -98,9 +104,9 @@ public class JSTLCartCheck {
 		e.setQty(1);
 		String data = mapper.writeValueAsString( e );
 		int cartId = (int)(Math.random() * 10000) + 1;
-		String cart = HtmlUtils.toString( wt.post("/cart/"+cartId+".json", data) );
+		String cart = HtmlUtils.toString( wt.post("/cart/"+cartId+"/add.json", data) );
 		SimpleResponse response = mapper.readValue(cart, SimpleResponse.class);
-		assertEquals("OK", response.status);
+		assertEquals(OK, response.status);
 		
 		String content = HtmlUtils.toString( wt.get("/cart/"+cartId+".html") );
 		Assert.assertTrue( content.contains("Boisson énergétique") );
@@ -113,12 +119,21 @@ public class JSTLCartCheck {
 		e.setQty(1);
 		String data = mapper.writeValueAsString( e );
 		int cartId = (int)(Math.random() * 10000) + 1;
-		String cart = HtmlUtils.toString( wt.post("/cart/"+cartId+".json", data) );
+		String cart = HtmlUtils.toString( wt.post("/cart/"+cartId+"/add.json", data) );
 		SimpleResponse response = mapper.readValue(cart, SimpleResponse.class);
-		assertEquals("OK", response.status);
+		assertEquals(OK, response.status);
 		
 		String content = HtmlUtils.toString( wt.get("/cart/"+cartId+".html") );
 		Assert.assertTrue( content.contains("Boisson énergétique") );
+		
+		InputStream is = wt.get("/cart/"+cartId+"/validate.html");
+		is.close();
+		assertEquals(302, wt.code());
+		
+		String orderList = HtmlUtils.toString( wt.get("/order/ofCustomer/chuckNorris.html") );
+		assertTrue( orderList.contains("ORDERED") );
+		assertTrue( orderList.contains("2,99") );
+		assertTrue( orderList.contains(new SimpleDateFormat("d/M/YY").format(new Date())) );
 	}
 
 }

@@ -2,6 +2,10 @@ package spring;
 
 import static org.junit.Assert.*;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -16,6 +20,7 @@ import org.springframework.ui.ExtendedModelMap;
 
 import fr.eservices.drive.mock.CartMockDao;
 import fr.eservices.drive.model.Order;
+import fr.eservices.drive.repository.OrderRepository;
 import fr.eservices.drive.web.OrderController;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -24,6 +29,8 @@ import fr.eservices.drive.web.OrderController;
 @ComponentScan(basePackageClasses={CartMockDao.class})
 public class OrderControllerTest {
 	
+	private static final List<Order> testList = Arrays.asList();
+	
 	/*
 	 * Configuration du test
 	 */
@@ -31,6 +38,22 @@ public class OrderControllerTest {
 	@Bean
 	OrderController orderController() {
 		return new OrderController();
+	}
+	
+	@Bean
+	OrderRepository orderRepository() {
+		return (OrderRepository) Proxy.newProxyInstance(
+			CartControllerTest.class.getClassLoader(), 
+			new Class[]{OrderRepository.class},
+			new InvocationHandler() {
+				@Override public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+					if ( "hashCode".equals(method.getName()) ) return 1;
+					if ( method.getName().startsWith("findBy") && method.getReturnType().isAssignableFrom(List.class) )
+						return testList;
+					return null;
+				}
+			}
+		);
 	}
 	
 	/*
@@ -47,10 +70,9 @@ public class OrderControllerTest {
 		String view = ctrl.list("chuckNorris", model);
 		assertEquals("order_list", view);
 		@SuppressWarnings("unchecked")
-		List<Order> orders = 
-				(List<Order>) model.get("orders");
+		List<Order> orders = (List<Order>) model.get("orders");
 		assertNotNull(orders);
-		
+		assertEquals(testList, orders);
 	}
 
 }

@@ -43,6 +43,33 @@ public class ArticleMockDao implements ArticleDao {
 			arts.put( a.getId(), a );
 		}
 		
+		{
+			Article a = new Article();
+			a.setId("195420");
+			a.setName("420g Fromage à raclette");
+			a.setPrice(450);
+			a.setImg("https://static1.chronodrive.com/img/PM/P/0/20/0P_195420.gif");
+			arts.put( a.getId(), a );
+		}
+		
+		{
+			Article a = new Article();
+			a.setId("165609");
+			a.setName("6 tranches Jambon Serrano");
+			a.setPrice(174);
+			a.setImg("https://static1.chronodrive.com/img/PM/P/0/09/0P_165609.gif");
+			arts.put( a.getId(), a );
+		}
+		
+		{
+			Article a = new Article();
+			a.setId("120574");
+			a.setName("2,5 kg Pomme de terre Cat 1");
+			a.setPrice(169);
+			a.setImg("https://static1.chronodrive.com/img/PM/P/0/74/0P_120574.gif");
+			arts.put( a.getId(), a );
+		}
+		
 	}
 	
 

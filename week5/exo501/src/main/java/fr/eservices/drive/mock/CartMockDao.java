@@ -53,5 +53,12 @@ public class CartMockDao implements CartDao {
 		
 		return carts.get(id);
 	}
+	
+	@Override
+	public void store(int id, Cart cart) throws DataException {
+		if ( id <= 0 ) throw new DataException("Invalid cart ID");
+		if ( carts.get(id) != null ) throw new DataException("Cart already exists");
+		carts.put(id, cart);
+	}
 
 }

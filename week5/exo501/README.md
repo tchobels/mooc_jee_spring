@@ -1,77 +1,112 @@
-# Exercice 4/02
+# Exercice 5/01
 
 Cet exercice vous permettra de réaliser des vues avec JSTL et la taglib spring-form.  
 Il est réalisable sans utiliser les éléments des exercices précédants.
 
 Le pom reprend les dépendance d'un projet spring-webmvc classique.
 
-* Ajouter une dépendance vers l'artefact jstl du groupe javax.servlet.jsp.jstl version 1.2
+* Ajouter une dépendance vers l'artefact jstl du groupe javax.servlet en version 1.2, dans le scope runtime
+
+Le contexte Spring est déjà configuré via l'objet fr.eservices.drive.web.AppConfig
 
 
-## Configurer un contexte web pour spring
+## Implémenter le contrôleur panier
 
-Il faut commencer par enregistrer la DispatcherServlet de spring-webmvc.  
-Cela se fait au moyen d'un fichier "web.xml", ou en étendant WebApplicationInitializer et sa méthode "onStartup".  
-Nous opterons pour cette 2e solution.
+Ouvrez la classe CartController.
 
-Ouvrez la classe AppConfig et ajoutez les annotations nécessaires pour activer le module Spring Web MVC.  
-Ajoutez une autre annotation pour rechercher les composants et contrôleurs dans les paquetages pertinents.
+* Implémentez la méthode getCart.  
+  Vous lancerez une DataException si l'identifiant du panier est inférieur ou égal à 0.  
+  Cette méthode sera appelée en "ajax" et renverra uniquement le morceau de html utile à l'affichage du contenu du panier.
+* Ce contrôleur propose un ExceptionHandler sur le type d'exception DataException.  
+  Observez les annotations placée et le comportement de ce Handler.
+* Ouvrez  le fichier exo501/src/main/webapp/js/cart.js  
+  Ce javascript est exécuté pour afficher le contenu du panier dans l'entête du site, sur le menu "panier" ouvert en dropdown.  
+  Notre Dao (un mock) ne propose pour le moment que le contenu du panier "1", modifiez le dernier appel ajax pour afficher le panier 1.  
+* packagez l'application et lancez tomcat.
+* Accédez à http://localhost:8080/exo501/sample_products.jsp  
+  Cette page est une liste de produits fixes. Elle fait maintenant un appel au panier "1" et l'affiche dans le menu.  
+  La vue utilisée pour le menu est elle-aussi fixe pour le moment.
+  
 
-## Configurer un contrôleur
+## Implémentez la vue panier
 
-Ouvrez la classe CatalogController.
-
-* exposez cette classe dans le contexte comme un contrôleur
-* injectez une référence de CatalogMockDao
-* configurez convenablement le mapping des url pour que les opérations "list" et "categoryContent" soient respectivement appelées lors de l'utilisation des url /catalog/categories.html et /catalog/category/ID.html (ID étant l'identifiant de la catégorie à afficher).
-* Implémentez les deux opérations pour mettre à disposition du model les objets issus du DAO.
-* Ces opérations retourneront le nom logique des vues à afficher.
-* Ajoutez un ViewResolver dans le contexte de spring pour permettre de placer toutes les vues dans /WEB-INF/views et d'ajouter automatiquement l'extension "jsp" à ces vues.
-
-## Implémenter les vues
-
-Complétez la vue "categories.jsp" pour afficher la liste des catégories.
-
-Pour chaque catégorie, on affichera :
-
-* Un lien vers le contenu de la catégorie
-* Une image représentant la catégorie
-* Le nom de la catégorie
-
-Complétez la vue "category.jsp" pour afficher les produits d'une catégorie.
+Complétez la vue "_cart_header.jsp" pour afficher la liste des produits du panier.
 
 Pour chaque produit, on affichera :
 
-* son image
-* son prix au format X,XX € (les prix sont en centimes dans la base fournie)
-* son libellé (nom du produit)
+* son nom
+* son prix au format "X,XX €"  
+  vous pouvez utiliser la taglib fmt et la fonction formatNumber pour cela, avec un type currency et une valeur "{$art.price / 100.0}" par exemple.
 
-## Implémenter un webservice manipulant des données JSON
+Si le panier ne contient aucun article affichez "aucun article".
 
-Pour permettre à spring de manipuler des objets en entrée ou sortie au format JSON, il est nécessaire d'avoir une librairie tierse dans le classpath au runtime.  
-Notre application possède déjà une dépendance vers une telle librairie. En effet, le mock du DAO Catalog utilise une partie de la librairie "jackson" qui permet de transformer du JSON en objet java et inversement.  
-Si ce n'était pas le cas, il faudrait ajouter la dépendance vers l'artefact "jackson-databind" du groupe "com.fasterxml.jackson.core". Cette dépendance étant uniquement nécessaire par spring à l'éxécution, il serait possible de mettre cette dépendance en scope "runtime".
+Ce morceau de vue est chargé à la suite de l'affichage de la page sample_product, par un appel réalisé en javascript.  
+Le contenu html est alors placé dans le menu.  
+C'est une technique assez utilisée pour injecter du contenu dynamique dans une partie de html commune, ou pour éviter de recharger toute la page si le contenu est modifié.
 
-Un contrôleur REST est un contrôleur permettant de manipuler en entrée des objets java construit à partir du corps de requêtes HTTP, et produisant des objet java traduit directement dans un format, autre que html.  
-Ces contrôleurs sont généralement appelés par une librairie ou un programme tiers, qui devra pouvoir interpréter les réponses HTTP.
+Le contenu du panier est donc aussi disponible via l'adresse http://localhost:8080/exo501/cart/1.html
 
-Ce type de Contrôleur est annoté "RestControler" en spring.
 
-Complétez la classe "RestHistoryController" pour exposer les deux opérations "getHistory" et "addStatus".  
-Les deux opérations seront exposées sur la même URL "/history/ID.json" (ID étant l'identifiant de la commande concernée).  
-La première opération sera exposée sur les opération HTTP GET, la seconde uniquement sur du "POST".
+## Implémentez la fonction d'ajout de produit
 
-le paramètre StatusHistory de l'opération "addStatus" sera créé à partir du corps de la requête HTTP, sous la forme d'un objet JSON transformé automatiquement en java par la librairie "jackson".
+* Complétez la fonction add de CartController.  
+  Cette fonction est appelée en ajax, elle reçoit un objet CartEntry qui est construit à partir d'un objet JSON reçu dans le corps de la requête HTTP Post.  
+  C'est jQUery qui est utilisé dans le script cart.js qui se charge d'effectuer l'appel à ce contrôleur.
+* Renvoyer une status d'erreur si :  
+  - produit n'existe pas, 
+  - la quantité est strictement inférieure à 0
+* Vous devriez ajouter les produits présentés sur la page sample_products au Mock pour tester votre implémentation.
+* Essayez de mettre à jour le panier lorsque vous recevez un status OK.  
+  Prenez modèle sur l'appel initial d'affichage du panier.
 
-L'opération "addStatus" renverra "Ok" si le status est correctement ajouté, "Error" si une exception est générée (exemple : commande introuvable).
+## Implémentez la fonction de validation du panier
 
-Le mock "HistorySourceMock" renvoit les même status pour chaque commande, excepté pour la commande numéro 666 pour laquelle une exception est levée.
+Cette fonction doit créer une commande à partir du panier, en prenant chaque article et en l'associant à la commande.  
+Afin de fixer le montant du panier à la valeur des articles au moment de la commande, il faudra calculer la somme des prix de chaque article.  
+
+L'objectif est de compléter la fonction validate du controleur CartController.  
+Plutot que d'implémenter une classe sur OrderDao, essayez d'utiliser un CrudRepository :
+  
+* déclarez un contexte de persistance JPA en écrivant un fichier de persistance,
+* ajoutez les dépendances vers :  
+  - Hibernate-core comme implémentation de JPA,  
+  - H2 pour pouvoir persister vos données,  
+  - spring-data-jpa ( org.springframework.data : spring-data-jpa : 1.11.8.RELEASE )
+* Il faut exposez l'entityManagerFactory dans le contexte via un Bean déclaré dans AppConfig,  
+  utilisez un LocalContainerEntityManagerFactoryBean et nommez le entityManagerFactory.
+* Il faut aussi exposer un PlatformTransactionManager de type JpaTransactionManager nommé "transactionManager".    
+  n'hésitez pas à regarder (cette partie du screencast)[https://www.youtube.com/watch?v=9cyJWGng-iA#t=2m35s] pour suivre la démarche. 
+* faîtes une extension de CrudRepository avec les bons types génériques sur OrderRepository
+* activer les JpaRepository en plaçant l'annotation @EnableJpaRepository sur AppConfig,  
+  indiquez le package dans lequel se trouve le(s) interfaces dont vous souhaitez générer les implémentations.
+* placer une référence de OrderRepository dans le CartController, à la place de orderDao et placez l'annotation @Autowired.  
+  Vous pouvez maintenant utiliser ce repository pour créer une commandes à partir d'un panier.  
+  Complétez la méthode validateCart, vous pouvez utilisez l'identifiant "chuckNorris" pour lier à un client factice.    
+  Assignez le status "ORDERED" comme état initial de cette commande.
+* A la fin du traitement rediriger l'utilisateur vers la liste des commandes de "chuckNorris".
+
+## Implémentez la liste des commandes
+
+Implémentez la méthode list du OrderController.
+
+* Recherchez les commandes avec le OrderRepository à injecter dans ce contrôleur,  
+  pour cela ajouter une méthode dans ce repository pour rechercher toutes les commandes d'un client,
+  ordonnées par date décroissante ce commande.
+* Affectez ces commandes à "orders" dans le Model 
+* Cette méthode de contrôleur pointera sur la vue order_list.jsp
+
+Implémentez la vue order_list.jsp
+
+* Itérez sur chaque commande
+* Afficher la date de la commande, le montant et le status actuel
+
+  
 
 ## Pour aller plus loin
 
-* Essayez de brancher les DAO JPA de l'exercice 3/01.  
-Vous devriez être en mesure d'ajouter une dépendance vers votre librairie "drive-model" si vous l'avez installé dans votre repository maven local.  
-Pensez à supprimer les packages "fr.eservices.drive.dao" et "fr.eservices.drive.model" du projet "exo401" si vous utilisez cette librairie.
-* Implémentez l'interface HistorySource à l'aide d'un DAO JPA.
+* Utilisez un panier propre à chaque visiteur
+* Modifiez les vues et contrôleurs pour prendre en compte cette modification
+* Lors de la validation de commande, assigner un nouveau panier au visiteur
+* Essayez de ré-intégrer le contenu des précédants exercices pour avoir l'ensemble des fonctions du Drive implémentées jusqu'ici.  
 
 

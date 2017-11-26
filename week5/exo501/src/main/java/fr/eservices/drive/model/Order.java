@@ -1,5 +1,6 @@
 package fr.eservices.drive.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,13 +9,15 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import fr.eservices.drive.dao.Status;
 
 @Entity
-public class Order {
+@Table(name="orders")
+public class Order implements Serializable {
 	
 	@Id
 	@GeneratedValue
@@ -30,7 +33,7 @@ public class Order {
 	@ElementCollection
 	List<String> articles = new ArrayList<>();
 	
-	Status current;
+	Status currentStatus;
 
 	public long getId() {
 		return id;
@@ -69,7 +72,12 @@ public class Order {
 	public void setArticles(List<String> articles) {
 		this.articles = articles;
 	}
-
+	public Status getCurrentStatus() {
+		return currentStatus;
+	}
+	public void setCurrentStatus(Status currentStatus) {
+		this.currentStatus = currentStatus;
+	}
 	
 	
 }

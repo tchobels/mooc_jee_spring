@@ -51,7 +51,7 @@ public class OrderViewTest {
 			chooseTag = HtmlUtils.getTagContent(chooseTag, "c:choose");
 			chooseTag = HtmlUtils.toNextTag(chooseTag, "c:when");
 			assertNotNull(chooseTag);
-			if (  HtmlUtils.getTagAttribute(ifTag, "c:when", "test").contains("orders") ) 
+			if (  HtmlUtils.getTagAttribute(chooseTag, "c:when", "test").contains("orders") ) 
 				chooseTag = HtmlUtils.toNextTag(chooseTag, "c:otherwise");
 		}
 		assertTrue(

@@ -37,7 +37,7 @@ public interface CatalogDao {
 	 * 
 	 * @param day for perishable date to compare with
 	 * @return perished article, can be empty
-	 * @throws DataException if more than 100 perishable exits
+	 * @throws DataException if more than 200 perishable exits
 	 */
 	List<Perishable> getPerished( Date day ) throws DataException;
 	

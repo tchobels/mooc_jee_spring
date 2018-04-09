@@ -162,10 +162,15 @@ web: java $JAVA_OPTS -jar target/dependency/webapp-runner.jar --port $PORT targe
   </plugins>
 </build>
 ```
-- ajoutez le pom.xml et le Procfile aux sources git : git add Procfile pom.xml
-- commitez ces modifications : git commit -m "Deploying to heroku"
-- créez une application heroku : heroku create
-- ajoutez le repo distant heroku : git add heroku https://high-lightning-129.herokuapp.com/
-- poussez vos modifs sur heroku : git push heroku master
+- ajoutez le pom.xml et le Procfile aux sources git : ```git add Procfile pom.xml```
+- commitez ces modifications : ```git commit -m "Deploying to heroku"```
+- créez une application heroku : ```heroku create```  
+Héroku vous fournit à ce moment là l'url du dépot git associé à votre projet. Copiez la pour la commande suivante.   
+- ajoutez le repo distant heroku :```git add heroku https://high-lightning-129.herokuapp.com/```  
+en remplaçant évidemment par l'url de votre dépot.
+- poussez vos modifs sur heroku : ```git push heroku master```  
+Héroku devrait alors construire votre projet et le déployer.  
+Il est maintenant accessible à travers l'url fournie auparavant. Pensez simplement à y ajouter le nom du contexte web, exemple ```/exo501```
+
 
 

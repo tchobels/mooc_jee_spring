@@ -110,3 +110,62 @@ Implémentez la vue order_list.jsp
 * Essayez de ré-intégrer le contenu des précédants exercices pour avoir l'ensemble des fonctions du Drive implémentées jusqu'ici.  
 
 
+## Déployer sur Héroku
+
+(Heroku)[https://www.heroku.com/] est une plateforme offrant des services d'hébergement d'application Node, Ruby, Java, Php, python ...
+
+Heroku offre un service freemium vous permettant de déployer de petites applications gratuitement.  
+Nous décrivons ici, brièvement, la procédure pour déployer votre projet sur heroku.  
+Heroku met à votre disposition un dépot de source git. C'est à travers les mises à jour de ce dépot que heroku va déployer votre application après chaque mise à jour (push).  
+
+N'hésitez pas à consultez la documentation générale de Heroku ou la partie dédié au déploiement d'application web java :  
+https://devcenter.heroku.com/articles/java-webapp-runner
+
+
+
+- Créer un compte sur heroku :  
+https://signup.heroku.com/login
+- Téléchargez et installez le CLI heroku pour votre système :  
+https://devcenter.heroku.com/articles/heroku-cli#download-and-install
+- Ouvrez la console et identifiez vous sur heroku : ```heroku login```
+- placez vous dans le répertoire de votre projet et initialisez un repo git : ```git init```
+- ajoutez vos sources : ```git add src```
+- créez un fichier Procfile contenant :  
+```
+web: java $JAVA_OPTS -jar target/dependency/webapp-runner.jar --port $PORT target/*.war
+```
+- ajoutons le lanceur d'application "webapp" dans le pom.xml :
+```
+<build>
+  <plugins>
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>3.0.2</version>
+          <executions>
+              <execution>
+                  <phase>package</phase>
+                  <goals><goal>copy</goal></goals>
+                  <configuration>
+                      <artifactItems>
+                          <artifactItem>
+                              <groupId>com.github.jsimone</groupId>
+                              <artifactId>webapp-runner</artifactId>
+                              <version>8.5.27.0</version>
+                              <destFileName>webapp-runner.jar</destFileName>
+                          </artifactItem>
+                      </artifactItems>
+                  </configuration>
+              </execution>
+          </executions>
+      </plugin>
+  </plugins>
+</build>
+```
+- ajoutez le pom.xml et le Procfile aux sources git : git add Procfile pom.xml
+- commitez ces modifications : git commit -m "Deploying to heroku"
+- créez une application heroku : heroku create
+- ajoutez le repo distant heroku : git add heroku https://high-lightning-129.herokuapp.com/
+- poussez vos modifs sur heroku : git push heroku master
+
+

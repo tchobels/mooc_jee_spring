@@ -1,21 +1,20 @@
 package webcart;
 
-import java.io.PrintWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
 public class Cart {
 	
-	protected Map<String, Integer> entries;
+	protected Map<String, Integer> entries = new HashMap<>();
 	
 	protected void added( String reference, int quantity ) {}
 	protected void updated( String reference, int quantity ) {}
 	protected void deleted( String reference ) {}
 	
 	public void addToCart(String reference, int quantity) {
-		
-		if ( entries == null ) entries = new HashMap<>();
 		
 		// Check if entry was in cart
 		Integer qte = entries.get( reference );
@@ -36,16 +35,25 @@ public class Cart {
 		}
 	}
 	
-	public void print(PrintWriter out) {
-		out.print("<ul>\n");
-		for ( Entry<String, Integer> entry : entries.entrySet() ) {
-			out.print( String.format("<li>%s (x %03d)</li>\n", entry.getKey(), entry.getValue()) );
-		}
-		out.print("</ul>\n");
+
+
+	public void print(Writer out) {
+		try {
+			out.append("<ul>\n");
+			for ( Entry<String, Integer> entry : entries.entrySet() ) {
+				out.append( String.format("<li>%s (x %03d)</li>\n", entry.getKey(), entry.getValue()) );
+			}
+			out.append("</ul>\n");
+		} catch (IOException e) {}
 	}
 	
 	public boolean mayAdd( String reference, int quantity  ) { 
 		return true; 
+	}
+	
+	@Override
+	public String toString() {
+		return entries.toString();
 	}
 
 }

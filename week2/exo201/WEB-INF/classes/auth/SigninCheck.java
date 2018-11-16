@@ -24,7 +24,9 @@ public class SigninCheck {
 	
 	@Before
 	public void initWebTool() {
-		web = new WebTool("localhost:8080", "/exo201/");
+		String port = System.getProperty("usePort");
+		int iPort = ( port == null ? 8080 : Integer.parseInt(port) );
+		web = new WebTool("localhost:"+iPort, "/exo201/");
 	}
 
 	@Test

@@ -6,4 +6,3 @@ Les exercices suivants ont été présentés lors des sessions précédentes de 
 
 * [exo101](exo101) est un exercice simple d'implémentation d'une servlet
 * [exo102](exo102) est un exercice qui met en oeuvre un formulaire d'authentification avec des JSP/servlet et une gestion de session
-

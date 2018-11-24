@@ -55,15 +55,15 @@ public class JpaAnnotations {
 	@Test public void testArticle() {
 		Class<?> k = Article.class;
 		assertHasAnnotation( k, entityAnnotation );
+		assertHasAnnotation( k, inheritanceAnnotation );
 		assertHasNbAnnotation( k, 1, idAnnotation );
-		
 		assertHasAssociation( k, List.class, manyToManyAnnotation );
 	}	
 
 	@Test public void testPerishable() {
 		Class<?> k = Perishable.class;
 		assertHasAnnotation( k, entityAnnotation );
-		assertHasAnnotation( k, inheritanceAnnotation );
+		
 		assertHasNbAnnotation( k, 0, idAnnotation );
 		assertHasNbAnnotation( k, 1, temporalAnnotation );
 	}
@@ -71,7 +71,6 @@ public class JpaAnnotations {
 	@Test public void testProduct() {
 		Class<?> k = Product.class;
 		assertHasAnnotation( k, entityAnnotation );
-		assertHasAnnotation( k, inheritanceAnnotation );
 		assertHasNbAnnotation( k, 0, idAnnotation );
 		assertHasNbAnnotation( k, 0, temporalAnnotation );
 	}

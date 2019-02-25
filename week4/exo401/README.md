@@ -3,7 +3,7 @@
 Cet exercice vous propose de vous familiariser avec les contextes Spring et l'injection de dépendances.
 
 L'objectif est de réaliser deux assemblages de composants similaires d'une application de changement de mot de passe.  
-Cet exercice est indépendant des autres, il redéfini une entité User et son DAO, sous la forme d'une interface, une classe abstraite pour gérer la vérification et la modification du mot de passe. Deux implémentation d'encodage de mot de passe seront à implémenter.
+Cet exercice est indépendant des autres, il redéfinit une entité User et son DAO, sous la forme d'une interface, une classe abstraite pour gérer la vérification et la modification du mot de passe. Deux implémentations d'encodage de mot de passe seront à implémenter.
 
 Nous allons voir deux manières de définir un contexte Spring :
 
@@ -45,7 +45,7 @@ Vous pouvez utiliser le main de la classe UserJPADao pour ajouter un utilisateur
 
 A noter : le provider JPA fourni par Hibernate va générer un pool de connexions qui écoute les événements du contexte Spring. Lorsque le contexte s'arrête, les connexions seront fermées et l'EntityManagerFactory arrêté proprement.
 
-## Utilisation des fichiers xml de contexte
+## Utilisation des fichiers XML de contexte
 
 L'objectif est de fournir un fichier créant un contexte avec l'implémentation JDBC du UserDAO et l'implémentation MD5 du PasswordChecker.
 

@@ -8,10 +8,10 @@ Quelques précisions sur le modèle :
 
 * Article
 
-Les identifiants seront numériques (int).  
-L'EAN est le codebarre de l'article, codé sur 13 caractères.  
+Les identifiants sont numériques (int).  
+L'EAN est le code barre de l'article, codé sur 13 caractères.  
 Le prix est un entier représentant le prix en centimes.  
-vat est le taux de tva. (0.20 = 20%).  
+vat est le taux de tva (0.20 = 20%).  
 
 * Category
 
